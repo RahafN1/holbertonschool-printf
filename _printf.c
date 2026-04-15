@@ -38,6 +38,56 @@ int print_string(va_list args)
 	}
 	return (len);
 }
+#include "main.h"
+
+/**
+ * print_number - formats and prints a number string based on parameters
+ * @str: string representation of the number
+ * @params: pointer to struct containing formatting options
+ *
+ * Return: number of characters printed
+ */
+
+int print_number(char *str, params_t *params)
+{
+	unsigned int len;
+	int is_neg;
+
+	len = strlen(str);
+	is_neg = (!params->unsign && *str == '-');
+
+	/* Handle precision edge case for zero */
+	if (!params->precision && *str == '0' && str[1] == '\0')
+		str = "";
+
+	/* Remove negative sign temporarily */
+	if (is_neg)
+	{
+		str++;
+		len--;
+	}
+
+	/* Apply precision (leading zeros) */
+	if (params->precision != UINT_MAX)
+	{
+		while (len < params->precision)
+		{
+			*--str = '0';
+			len++;
+		}
+	}
+
+	/* Restore negative sign */
+	if (is_neg)
+		*--str = '-';
+
+	/* Handle alignment */
+	if (params->minus_flag)
+		return (print_number_left_shift(str, params));
+
+	return (print_number_right_shift(str, params));
+}
+
 
 /**
  * _printf - produces output according to a format
@@ -75,6 +125,8 @@ int _printf(const char *format, ...)
 				write(1, "%", 1);
 				count++;
 			}
+			else if (format[i] == 'd' || format[i] == 'i')
+				count += print_int(args);
 			else
 			{
 				write(1, &format[i - 1], 1);
