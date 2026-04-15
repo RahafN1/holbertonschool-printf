@@ -6,5 +6,6 @@
 int _printf(const char *format, ...);
 int print_char(va_list args);
 int print_string(va_list args);
+int print_number(char *str, params_t *params);
 
 #endif
