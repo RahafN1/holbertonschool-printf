@@ -48,44 +48,43 @@ int print_string(va_list args)
  * Return: number of characters printed
  */
 
-int print_number(char *str, params_t *params)
+#include "main.h"
+#include <unistd.h>
+
+/**
+ * print_int - prints an integer
+ * @n: number to print
+ *
+ * Return: number of characters printed
+ */
+
+int print_int(int n)
 {
-	unsigned int len;
-	int is_neg;
+	unsigned int num;
+	int count;
+	char c;
 
-	len = strlen(str);
-	is_neg = (!params->unsign && *str == '-');
+	count = 0;
 
-	/* Handle precision edge case for zero */
-	if (!params->precision && *str == '0' && str[1] == '\0')
-		str = "";
-
-	/* Remove negative sign temporarily */
-	if (is_neg)
+	if (n < 0)
 	{
-		str++;
-		len--;
+		write(1, "-", 1);
+		count++;
+		num = -n;
+	}
+	else
+	{
+		num = n;
 	}
 
-	/* Apply precision (leading zeros) */
-	if (params->precision != UINT_MAX)
-	{
-		while (len < params->precision)
-		{
-			*--str = '0';
-			len++;
-		}
-	}
+	if (num / 10)
+		count += print_int(num / 10);
 
-	/* Restore negative sign */
-	if (is_neg)
-		*--str = '-';
+	c = (num % 10) + '0';
+	write(1, &c, 1);
+	count++;
 
-	/* Handle alignment */
-	if (params->minus_flag)
-		return (print_number_left_shift(str, params));
-
-	return (print_number_right_shift(str, params));
+	return (count);
 }
 
 
@@ -126,7 +125,7 @@ int _printf(const char *format, ...)
 				count++;
 			}
 			else if (format[i] == 'd' || format[i] == 'i')
-				count += print_int(args);
+				count += print_int(va_arg(args, int));
 			else
 			{
 				write(1, &format[i - 1], 1);
