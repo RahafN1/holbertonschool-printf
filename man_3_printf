@@ -1,0 +1,71 @@
+.TH _PRINTF 3 "2025" "Holberton School" "Library Functions Manual"
+
+.SH NAME
+_printf \- custom formatted output conversion
+
+.SH SYNOPSIS
+.B #include "main.h"
+.PP
+.BI "int _printf(const char *" format ", ...);"
+
+.SH DESCRIPTION
+The
+.B _printf()
+function produces output according to a format string.
+It writes output to stdout, the standard output stream.
+
+.PP
+The format string is composed of zero or more directives.
+Each directive is either a literal character or a conversion specifier.
+
+.SH CONVERSION SPECIFIERS
+.TP
+.B %c
+Prints a single character.
+
+.TP
+.B %s
+Prints a string of characters.
+If the argument is NULL, prints (null).
+
+.TP
+.B %d
+Prints a decimal integer.
+
+.TP
+.B %i
+Prints an integer.
+
+.TP
+.B %%
+Prints a literal percent sign.
+
+.SH RETURN VALUE
+Returns the number of characters printed (excluding the null byte).
+Returns \-1 if the format string is NULL.
+
+.SH EXAMPLES
+.PP
+Print a simple string:
+.PP
+.RS
+_printf("Hello, World!\n");
+.RE
+.PP
+Print a character:
+.PP
+.RS
+_printf("%c", 'A');
+.RE
+.PP
+Print an integer:
+.PP
+.RS
+_printf("%d", 42);
+.RE
+
+.SH AUTHORS
+Written by Holberton School students.
+
+.SH SEE ALSO
+.BR printf (3)
