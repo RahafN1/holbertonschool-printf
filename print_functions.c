@@ -117,4 +117,117 @@ int print_binary(va_list args)
 
 	return (count);
 }
+/**
+ * print_unsigned - prints unsigned int
+ * @args: argument list
+ *
+ * Return: number of characters printed
+ */
+int print_unsigned(va_list args)
+{
+	unsigned int n;
+	unsigned int divisor;
+	int count;
+	char digit;
 
+	n = va_arg(args, unsigned int);
+	count = 0;
+	divisor = 1;
+
+	while (n / divisor >= 10)
+		divisor *= 10;
+
+	while (divisor > 0)
+	{
+		digit = (n / divisor) + '0';
+		write(1, &digit, 1);
+		count++;
+		n %= divisor;
+		divisor /= 10;
+	}
+
+	return (count);
+}
+/**
+ * print_octal - prints number in octal
+ * @args: argument list
+ *
+ * Return: number of characters printed
+ */
+int print_octal(va_list args)
+{
+	unsigned int n;
+	unsigned int divisor;
+	int count;
+	char digit;
+
+	n = va_arg(args, unsigned int);
+	count = 0;
+	divisor = 1;
+
+	if (n == 0)
+	{
+		write(1, "0", 1);
+		return (1);
+	}
+
+	while (n / divisor >= 8)
+		divisor *= 8;
+
+	while (divisor > 0)
+	{
+		digit = (n / divisor) + '0';
+		write(1, &digit, 1);
+		count++;
+		n %= divisor;
+		divisor /= 8;
+	}
+
+	return (count);
+}
+#include "main.h"
+
+/**
+ * print_hex - prints number in hexadecimal
+ * @args: argument list
+ * @uppercase: 1 for uppercase, 0 for lowercase
+ *
+ * Return: number of characters printed
+ */
+int print_hex(va_list args, int uppercase)
+{
+	unsigned int n;
+	unsigned int divisor;
+	int count;
+	char *hex;
+	char digit;
+
+	n = va_arg(args, unsigned int);
+	count = 0;
+	divisor = 1;
+
+	if (uppercase)
+		hex = "0123456789ABCDEF";
+	else
+		hex = "0123456789abcdef";
+
+	if (n == 0)
+	{
+		write(1, "0", 1);
+		return (1);
+	}
+
+	while (n / divisor >= 16)
+		divisor *= 16;
+
+	while (divisor > 0)
+	{
+		digit = hex[n / divisor];
+		write(1, &digit, 1);
+		count++;
+		n %= divisor;
+		divisor /= 16;
+	}
+
+	return (count);
+}
