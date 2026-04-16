@@ -78,4 +78,43 @@ int print_int(va_list args)
 	}
 	return (count);
 }
+/**
+ * print_binary - prints an unsigned int in binary
+ * @args: argument list
+ *
+ * Return: number of characters printed
+ */
+int print_binary(va_list args)
+{
+	unsigned int n;
+	unsigned int divisor;
+	int count;
+	char digit;
+
+	n = va_arg(args, unsigned int);
+	count = 0;
+	divisor = 1;
+
+	if (n == 0)
+	{
+		write(1, "0", 1);
+		return (1);
+	}
+
+	/* find highest power of 2 */
+	while (n / divisor >= 2)
+		divisor *= 2;
+
+	/* print digits */
+	while (divisor > 0)
+	{
+		digit = (n / divisor) + '0';
+		write(1, &digit, 1);
+		count++;
+		n %= divisor;
+		divisor /= 2;
+	}
+
+	return (count);
+}
 

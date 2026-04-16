@@ -39,6 +39,8 @@ int _printf(const char *format, ...)
 				write(1, "%", 1);
 				count++;
 			}
+			else if (format[i] == 'b')
+				count += print_binary(args);
 			else
 			{
 				write(1, &format[i - 1], 1);
