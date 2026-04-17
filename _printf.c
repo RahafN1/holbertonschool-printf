@@ -36,6 +36,8 @@ int _printf(const char *format, ...)
 				count += print_char(args, buffer, &buf_idx);
 			else if (format[i] == 's')
 				count += print_string(args, buffer, &buf_idx);
+			else if (format[i] == 'S')
+				count += print_string_special(args, buffer, &buf_idx);
 			else if (format[i] == 'd' || format[i] == 'i')
 				count += print_int(args, buffer, &buf_idx);
 			else if (format[i] == 'b')
@@ -65,14 +67,15 @@ int _printf(const char *format, ...)
 			buffer[buf_idx++] = format[i];
 			count++;
 		}
-		if (buf_idx >= 1024)
+		if (buf_idx >= 1020)
 		{
 			write(1, buffer, buf_idx);
 			buf_idx = 0;
 		}
 		i++;
 	}
-	write(1, buffer, buf_idx);
+	if (buf_idx > 0)
+		write(1, buffer, buf_idx);
 	va_end(args);
 	return (count);
 }
