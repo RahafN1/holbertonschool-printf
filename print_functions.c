@@ -1,3 +1,6 @@
+#include "main.h"
+#include <unistd.h>
+
 /**
  * print_string_special - prints string with non-printable chars as \xHH
  * @args: va_list containing the string
