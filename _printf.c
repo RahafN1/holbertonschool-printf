@@ -67,7 +67,7 @@ int _printf(const char *format, ...)
 			buffer[buf_idx++] = format[i];
 			count++;
 		}
-		if (buf_idx >= 1020)
+		if (buf_idx >= 1024)
 		{
 			write(1, buffer, buf_idx);
 			buf_idx = 0;

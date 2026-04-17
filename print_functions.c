@@ -28,7 +28,7 @@ int print_char(va_list args, char *buffer, int *buf_idx)
 	char c;
 
 	c = (char)va_arg(args, int);
-	if (*buf_idx >= 1020)
+	if (*buf_idx >= 1024)
 		flush_buffer(buffer, buf_idx);
 	buffer[(*buf_idx)++] = c;
 	return (1);
@@ -53,7 +53,7 @@ int print_string(va_list args, char *buffer, int *buf_idx)
 		str = "(null)";
 	while (str[len])
 	{
-		if (*buf_idx >= 1020)
+		if (*buf_idx >= 1024)
 			flush_buffer(buffer, buf_idx);
 		buffer[(*buf_idx)++] = str[len];
 		len++;
@@ -83,7 +83,7 @@ int print_int(va_list args, char *buffer, int *buf_idx)
 	divisor = 1;
 	if (n < 0)
 	{
-		if (*buf_idx >= 1020)
+		if (*buf_idx >= 1024)
 			flush_buffer(buffer, buf_idx);
 		buffer[(*buf_idx)++] = '-';
 		count++;
@@ -93,7 +93,7 @@ int print_int(va_list args, char *buffer, int *buf_idx)
 			j = 0;
 			while (s[j])
 			{
-				if (*buf_idx >= 1020)
+				if (*buf_idx >= 1024)
 					flush_buffer(buffer, buf_idx);
 				buffer[(*buf_idx)++] = s[j];
 				j++;
@@ -106,7 +106,7 @@ int print_int(va_list args, char *buffer, int *buf_idx)
 		divisor *= 10;
 	while (divisor > 0)
 	{
-		if (*buf_idx >= 1020)
+		if (*buf_idx >= 1024)
 			flush_buffer(buffer, buf_idx);
 		digit = n / divisor + '0';
 		buffer[(*buf_idx)++] = digit;
@@ -138,7 +138,7 @@ int print_binary(va_list args, char *buffer, int *buf_idx)
 	i = 0;
 	if (n == 0)
 	{
-		if (*buf_idx >= 1020)
+		if (*buf_idx >= 1024)
 			flush_buffer(buffer, buf_idx);
 		buffer[(*buf_idx)++] = '0';
 		return (1);
@@ -151,7 +151,7 @@ int print_binary(va_list args, char *buffer, int *buf_idx)
 	}
 	while (i > 0)
 	{
-		if (*buf_idx >= 1020)
+		if (*buf_idx >= 1024)
 			flush_buffer(buffer, buf_idx);
 		buffer[(*buf_idx)++] = bits[--i];
 		count++;
@@ -179,7 +179,7 @@ int print_unsigned(va_list args, char *buffer, int *buf_idx)
 	divisor = 1;
 	if (n == 0)
 	{
-		if (*buf_idx >= 1020)
+		if (*buf_idx >= 1024)
 			flush_buffer(buffer, buf_idx);
 		buffer[(*buf_idx)++] = '0';
 		return (1);
@@ -188,7 +188,7 @@ int print_unsigned(va_list args, char *buffer, int *buf_idx)
 		divisor *= 10;
 	while (divisor > 0)
 	{
-		if (*buf_idx >= 1020)
+		if (*buf_idx >= 1024)
 			flush_buffer(buffer, buf_idx);
 		digit = n / divisor + '0';
 		buffer[(*buf_idx)++] = digit;
@@ -220,7 +220,7 @@ int print_octal(va_list args, char *buffer, int *buf_idx)
 	i = 0;
 	if (n == 0)
 	{
-		if (*buf_idx >= 1020)
+		if (*buf_idx >= 1024)
 			flush_buffer(buffer, buf_idx);
 		buffer[(*buf_idx)++] = '0';
 		return (1);
@@ -233,7 +233,7 @@ int print_octal(va_list args, char *buffer, int *buf_idx)
 	}
 	while (i > 0)
 	{
-		if (*buf_idx >= 1020)
+		if (*buf_idx >= 1024)
 			flush_buffer(buffer, buf_idx);
 		buffer[(*buf_idx)++] = digits[--i];
 		count++;
@@ -265,7 +265,7 @@ int print_hex(va_list args, char *buffer, int *buf_idx, int uppercase)
 	i = 0;
 	if (n == 0)
 	{
-		if (*buf_idx >= 1020)
+		if (*buf_idx >= 1024)
 			flush_buffer(buffer, buf_idx);
 		buffer[(*buf_idx)++] = '0';
 		return (1);
@@ -278,7 +278,7 @@ int print_hex(va_list args, char *buffer, int *buf_idx, int uppercase)
 	}
 	while (i > 0)
 	{
-		if (*buf_idx >= 1020)
+		if (*buf_idx >= 1024)
 			flush_buffer(buffer, buf_idx);
 		buffer[(*buf_idx)++] = digits[--i];
 		count++;
@@ -313,25 +313,25 @@ int print_string_special(va_list args, char *buffer, int *buf_idx)
 		c = (unsigned char)str[len];
 		if (c < 32 || c >= 127)
 		{
-			if (*buf_idx >= 1020)
+			if (*buf_idx >= 1024)
 				flush_buffer(buffer, buf_idx);
 			buffer[(*buf_idx)++] = '\\';
-			if (*buf_idx >= 1020)
+			if (*buf_idx >= 1024)
 				flush_buffer(buffer, buf_idx);
 			buffer[(*buf_idx)++] = 'x';
 			hi = hex[c / 16];
 			lo = hex[c % 16];
-			if (*buf_idx >= 1020)
+			if (*buf_idx >= 1024)
 				flush_buffer(buffer, buf_idx);
 			buffer[(*buf_idx)++] = hi;
-			if (*buf_idx >= 1020)
+			if (*buf_idx >= 1024)
 				flush_buffer(buffer, buf_idx);
 			buffer[(*buf_idx)++] = lo;
 			len += 4;
 		}
 		else
 		{
-			if (*buf_idx >= 1020)
+			if (*buf_idx >= 1024)
 				flush_buffer(buffer, buf_idx);
 			buffer[(*buf_idx)++] = c;
 			len++;
