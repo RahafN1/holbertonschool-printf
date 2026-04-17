@@ -67,7 +67,7 @@ int print_int(va_list args, char *buffer, int *buf_idx)
 		count++;
 		if (n == -2147483648)
 		{
-			print_string_literal("2147483648", buffer, buf_idx);
+			print_string_buf("2147483648", buffer, buf_idx);
 			return (count + 10);
 		}
 		n = -n;
@@ -81,6 +81,159 @@ int print_int(va_list args, char *buffer, int *buf_idx)
 		count++;
 		n %= divisor;
 		divisor /= 10;
+	}
+	return (count);
+}
+
+/**
+ * print_binary - adds binary representation to buffer
+ * @args: va_list containing the unsigned int
+ * @buffer: output buffer
+ * @buf_idx: current index in buffer
+ *
+ * Return: number of characters added
+ */
+int print_binary(va_list args, char *buffer, int *buf_idx)
+{
+	unsigned int n;
+	unsigned int tmp;
+	int count;
+	int i;
+	char bits[32];
+
+	n = va_arg(args, unsigned int);
+	count = 0;
+	i = 0;
+	if (n == 0)
+	{
+		buffer[(*buf_idx)++] = '0';
+		return (1);
+	}
+	tmp = n;
+	while (tmp > 0)
+	{
+		bits[i++] = (tmp % 2) + '0';
+		tmp /= 2;
+	}
+	while (i > 0)
+	{
+		buffer[(*buf_idx)++] = bits[--i];
+		count++;
+	}
+	return (count);
+}
+
+/**
+ * print_unsigned - adds unsigned integer to buffer
+ * @args: va_list containing the unsigned int
+ * @buffer: output buffer
+ * @buf_idx: current index in buffer
+ *
+ * Return: number of characters added
+ */
+int print_unsigned(va_list args, char *buffer, int *buf_idx)
+{
+	unsigned int n;
+	unsigned int divisor;
+	int count;
+	int digit;
+
+	n = va_arg(args, unsigned int);
+	count = 0;
+	divisor = 1;
+	if (n == 0)
+	{
+		buffer[(*buf_idx)++] = '0';
+		return (1);
+	}
+	while (n / divisor >= 10)
+		divisor *= 10;
+	while (divisor > 0)
+	{
+		digit = n / divisor + '0';
+		buffer[(*buf_idx)++] = digit;
+		count++;
+		n %= divisor;
+		divisor /= 10;
+	}
+	return (count);
+}
+
+/**
+ * print_octal - adds octal representation to buffer
+ * @args: va_list containing the unsigned int
+ * @buffer: output buffer
+ * @buf_idx: current index in buffer
+ *
+ * Return: number of characters added
+ */
+int print_octal(va_list args, char *buffer, int *buf_idx)
+{
+	unsigned int n;
+	unsigned int tmp;
+	int count;
+	int i;
+	char digits[32];
+
+	n = va_arg(args, unsigned int);
+	count = 0;
+	i = 0;
+	if (n == 0)
+	{
+		buffer[(*buf_idx)++] = '0';
+		return (1);
+	}
+	tmp = n;
+	while (tmp > 0)
+	{
+		digits[i++] = (tmp % 8) + '0';
+		tmp /= 8;
+	}
+	while (i > 0)
+	{
+		buffer[(*buf_idx)++] = digits[--i];
+		count++;
+	}
+	return (count);
+}
+
+/**
+ * print_hex - adds hexadecimal representation to buffer
+ * @args: va_list containing the unsigned int
+ * @buffer: output buffer
+ * @buf_idx: current index in buffer
+ * @uppercase: 1 for uppercase, 0 for lowercase
+ *
+ * Return: number of characters added
+ */
+int print_hex(va_list args, char *buffer, int *buf_idx, int uppercase)
+{
+	unsigned int n;
+	unsigned int tmp;
+	int count;
+	int i;
+	char digits[32];
+	char *hex;
+
+	hex = uppercase ? "0123456789ABCDEF" : "0123456789abcdef";
+	n = va_arg(args, unsigned int);
+	count = 0;
+	i = 0;
+	if (n == 0)
+	{
+		buffer[(*buf_idx)++] = '0';
+		return (1);
+	}
+	tmp = n;
+	while (tmp > 0)
+	{
+		digits[i++] = hex[tmp % 16];
+		tmp /= 16;
+	}
+	while (i > 0)
+	{
+		buffer[(*buf_idx)++] = digits[--i];
+		count++;
 	}
 	return (count);
 }
