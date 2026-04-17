@@ -38,6 +38,16 @@ int _printf(const char *format, ...)
 				count += print_string(args, buffer, &buf_idx);
 			else if (format[i] == 'd' || format[i] == 'i')
 				count += print_int(args, buffer, &buf_idx);
+			else if (format[i] == 'b')
+				count += print_binary(args, buffer, &buf_idx);
+			else if (format[i] == 'u')
+				count += print_unsigned(args, buffer, &buf_idx);
+			else if (format[i] == 'o')
+				count += print_octal(args, buffer, &buf_idx);
+			else if (format[i] == 'x')
+				count += print_hex(args, buffer, &buf_idx, 0);
+			else if (format[i] == 'X')
+				count += print_hex(args, buffer, &buf_idx, 1);
 			else if (format[i] == '%')
 			{
 				buffer[buf_idx++] = '%';
