@@ -2,27 +2,31 @@
 #include <unistd.h>
 
 /**
- * print_char - prints a single character
- * @args: va_list containing the character to print
+ * print_char - adds a character to buffer
+ * @args: va_list containing the character
+ * @buffer: output buffer
+ * @buf_idx: current index in buffer
  *
- * Return: number of characters printed (always 1)
+ * Return: number of characters added
  */
-int print_char(va_list args)
+int print_char(va_list args, char *buffer, int *buf_idx)
 {
 	char c;
 
 	c = (char)va_arg(args, int);
-	write(1, &c, 1);
+	buffer[(*buf_idx)++] = c;
 	return (1);
 }
 
 /**
- * print_string - prints a string
- * @args: va_list containing the string to print
+ * print_string - adds a string to buffer
+ * @args: va_list containing the string
+ * @buffer: output buffer
+ * @buf_idx: current index in buffer
  *
- * Return: number of characters printed
+ * Return: number of characters added
  */
-int print_string(va_list args)
+int print_string(va_list args, char *buffer, int *buf_idx)
 {
 	char *str;
 	int len;
@@ -33,19 +37,21 @@ int print_string(va_list args)
 		str = "(null)";
 	while (str[len])
 	{
-		write(1, &str[len], 1);
+		buffer[(*buf_idx)++] = str[len];
 		len++;
 	}
 	return (len);
 }
 
 /**
- * print_int - prints an integer
- * @args: va_list containing the integer to print
+ * print_int - adds an integer to buffer
+ * @args: va_list containing the integer
+ * @buffer: output buffer
+ * @buf_idx: current index in buffer
  *
- * Return: number of characters printed
+ * Return: number of characters added
  */
-int print_int(va_list args)
+int print_int(va_list args, char *buffer, int *buf_idx)
 {
 	int n;
 	int count;
@@ -57,11 +63,11 @@ int print_int(va_list args)
 	divisor = 1;
 	if (n < 0)
 	{
-		write(1, "-", 1);
+		buffer[(*buf_idx)++] = '-';
 		count++;
 		if (n == -2147483648)
 		{
-			write(1, "2147483648", 10);
+			print_string_literal("2147483648", buffer, buf_idx);
 			return (count + 10);
 		}
 		n = -n;
@@ -71,163 +77,10 @@ int print_int(va_list args)
 	while (divisor > 0)
 	{
 		digit = n / divisor + '0';
-		write(1, &digit, 1);
+		buffer[(*buf_idx)++] = digit;
 		count++;
 		n %= divisor;
 		divisor /= 10;
 	}
-	return (count);
-}
-/**
- * print_binary - prints an unsigned int in binary
- * @args: argument list
- *
- * Return: number of characters printed
- */
-int print_binary(va_list args)
-{
-	unsigned int n;
-	unsigned int divisor;
-	int count;
-	char digit;
-
-	n = va_arg(args, unsigned int);
-	count = 0;
-	divisor = 1;
-
-	if (n == 0)
-	{
-		write(1, "0", 1);
-		return (1);
-	}
-
-	/* find highest power of 2 */
-	while (n / divisor >= 2)
-		divisor *= 2;
-
-	/* print digits */
-	while (divisor > 0)
-	{
-		digit = (n / divisor) + '0';
-		write(1, &digit, 1);
-		count++;
-		n %= divisor;
-		divisor /= 2;
-	}
-
-	return (count);
-}
-/**
- * print_unsigned - prints unsigned int
- * @args: argument list
- *
- * Return: number of characters printed
- */
-int print_unsigned(va_list args)
-{
-	unsigned int n;
-	unsigned int divisor;
-	int count;
-	char digit;
-
-	n = va_arg(args, unsigned int);
-	count = 0;
-	divisor = 1;
-
-	while (n / divisor >= 10)
-		divisor *= 10;
-
-	while (divisor > 0)
-	{
-		digit = (n / divisor) + '0';
-		write(1, &digit, 1);
-		count++;
-		n %= divisor;
-		divisor /= 10;
-	}
-
-	return (count);
-}
-/**
- * print_octal - prints number in octal
- * @args: argument list
- *
- * Return: number of characters printed
- */
-int print_octal(va_list args)
-{
-	unsigned int n;
-	unsigned int divisor;
-	int count;
-	char digit;
-
-	n = va_arg(args, unsigned int);
-	count = 0;
-	divisor = 1;
-
-	if (n == 0)
-	{
-		write(1, "0", 1);
-		return (1);
-	}
-
-	while (n / divisor >= 8)
-		divisor *= 8;
-
-	while (divisor > 0)
-	{
-		digit = (n / divisor) + '0';
-		write(1, &digit, 1);
-		count++;
-		n %= divisor;
-		divisor /= 8;
-	}
-
-	return (count);
-}
-#include "main.h"
-
-/**
- * print_hex - prints number in hexadecimal
- * @args: argument list
- * @uppercase: 1 for uppercase, 0 for lowercase
- *
- * Return: number of characters printed
- */
-int print_hex(va_list args, int uppercase)
-{
-	unsigned int n;
-	unsigned int divisor;
-	int count;
-	char *hex;
-	char digit;
-
-	n = va_arg(args, unsigned int);
-	count = 0;
-	divisor = 1;
-
-	if (uppercase)
-		hex = "0123456789ABCDEF";
-	else
-		hex = "0123456789abcdef";
-
-	if (n == 0)
-	{
-		write(1, "0", 1);
-		return (1);
-	}
-
-	while (n / divisor >= 16)
-		divisor *= 16;
-
-	while (divisor > 0)
-	{
-		digit = hex[n / divisor];
-		write(1, &digit, 1);
-		count++;
-		n %= divisor;
-		divisor /= 16;
-	}
-
 	return (count);
 }

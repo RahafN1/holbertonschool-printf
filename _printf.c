@@ -12,9 +12,12 @@ int _printf(const char *format, ...)
 	va_list args;
 	int count;
 	int i;
+	int buf_idx;
+	char buffer[1024];
 
 	count = 0;
 	i = 0;
+	buf_idx = 0;
 	if (!format)
 		return (-1);
 	va_start(args, format);
@@ -25,45 +28,41 @@ int _printf(const char *format, ...)
 			i++;
 			if (format[i] == '\0')
 			{
+				write(1, buffer, buf_idx);
 				va_end(args);
 				return (-1);
 			}
 			if (format[i] == 'c')
-				count += print_char(args);
+				count += print_char(args, buffer, &buf_idx);
 			else if (format[i] == 's')
-				count += print_string(args);
+				count += print_string(args, buffer, &buf_idx);
 			else if (format[i] == 'd' || format[i] == 'i')
-				count += print_int(args);
+				count += print_int(args, buffer, &buf_idx);
 			else if (format[i] == '%')
 			{
-				write(1, "%", 1);
+				buffer[buf_idx++] = '%';
 				count++;
 			}
-			else if (format[i] == 'b')
-				count += print_binary(args);
-			else if (format[i] == 'u')
-				count += print_unsigned(args);
-			else if (format[i] == 'o')
-				count += print_octal(args);
-			else if (format[i] == 'x')
-				count += print_hex(args, 0);
-			else if (format[i] == 'X')
-				count += print_hex(args, 1);
 			else
 			{
-				write(1, &format[i - 1], 1);
-				write(1, &format[i], 1);
+				buffer[buf_idx++] = format[i - 1];
+				buffer[buf_idx++] = format[i];
 				count += 2;
 			}
 		}
 		else
 		{
-			write(1, &format[i], 1);
+			buffer[buf_idx++] = format[i];
 			count++;
+		}
+		if (buf_idx >= 1024)
+		{
+			write(1, buffer, buf_idx);
+			buf_idx = 0;
 		}
 		i++;
 	}
+	write(1, buffer, buf_idx);
 	va_end(args);
 	return (count);
 }
-
