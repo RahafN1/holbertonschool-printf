@@ -57,6 +57,8 @@ int print_int(va_list args, char *buffer, int *buf_idx)
 	int count;
 	int divisor;
 	int digit;
+	int j;
+	char *s;
 
 	n = va_arg(args, int);
 	count = 0;
@@ -67,7 +69,13 @@ int print_int(va_list args, char *buffer, int *buf_idx)
 		count++;
 		if (n == -2147483648)
 		{
-			print_string_buf("2147483648", buffer, buf_idx);
+			s = "2147483648";
+			j = 0;
+			while (s[j])
+			{
+				buffer[(*buf_idx)++] = s[j];
+				j++;
+			}
 			return (count + 10);
 		}
 		n = -n;
